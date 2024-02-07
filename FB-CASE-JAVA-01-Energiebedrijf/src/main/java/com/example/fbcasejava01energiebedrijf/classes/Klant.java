@@ -2,47 +2,50 @@ package com.example.fbcasejava01energiebedrijf.classes;
 
 public class Klant {
 
-        private int klantnummer;
-        private String voornaam;
-        private String achternaam;
-        private double jaarlijksVoorschot;
+    private String customerNumber;
 
-        public Klant(int klantnummer, String voornaam, String achternaam, double jaarlijksVoorschot) {
-            this.klantnummer = klantnummer;
-            this.voornaam = voornaam;
-            this.achternaam = achternaam;
-            this.jaarlijksVoorschot = jaarlijksVoorschot;
-        }
+    private String firstName;
 
-        public int getKlantnummer() {
-            return klantnummer;
-        }
+    private String lastName;
 
-        public void setKlantnummer(int klantnummer) {
-            this.klantnummer = klantnummer;
-        }
+    private String annualAdvance;
 
-        public String getVoornaam() {
-            return voornaam;
-        }
+    public Klant(String customerNumber, String firstName, String lastName, String annualAdvance) {
+        this.customerNumber = customerNumber;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.annualAdvance = annualAdvance;
+    }
 
-        public void setVoornaam(String voornaam) {
-            this.voornaam = voornaam;
-        }
+    public String getCustomerNumber() {
+        return customerNumber;
+    }
 
-        public String getAchternaam() {
-            return achternaam;
-        }
+    public void setCustomerNumber(String customerNumber) {
+        this.customerNumber = customerNumber;
+    }
 
-        public void setAchternaam(String achternaam) {
-            this.achternaam = achternaam;
-        }
+    public String getFirstName() {
+        return firstName;
+    }
 
-        public double getJaarlijksVoorschot() {
-            return jaarlijksVoorschot;
-        }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-        public void setJaarlijksVoorschot(double jaarlijksVoorschot) {
-            this.jaarlijksVoorschot = jaarlijksVoorschot;
-        }
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getAnnualAdvance() {
+        return annualAdvance;
+    }
+
+    public void setAnnualAdvance(String annualAdvance) {
+        this.annualAdvance = annualAdvance;
+    }
 }
