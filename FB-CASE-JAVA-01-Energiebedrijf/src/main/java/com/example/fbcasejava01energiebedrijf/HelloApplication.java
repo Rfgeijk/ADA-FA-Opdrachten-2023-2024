@@ -1,12 +1,8 @@
 package com.example.fbcasejava01energiebedrijf;
 
-import com.example.fbcasejava01energiebedrijf.classes.DataEntry;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
@@ -15,11 +11,116 @@ import java.util.ArrayList;
 
 public class HelloApplication extends Application {
 
-    private ArrayList<DataEntry> dataList = new ArrayList<>();
+    private static ArrayList<WeeklyUsage> weeklyUsages = new ArrayList<>();
+    private static double totaalStroomVerbruik = 0;
+    private static double totaalGasVerbruik = 0;
+    private static double stroomTarief = 0;
+    private static double gasTarief = 0;
+    private static double jaarlijksVoorschot = 0;
+
+
+    private static void addWeeklyUsage(double stroomVerbruik, double gasVerbruik) {
+        totaalStroomVerbruik += stroomVerbruik;
+        totaalGasVerbruik += gasVerbruik;
+
+        // Voeg wekelijkse gegevens toe aan de lijst
+        WeeklyUsage weeklyUsage = new WeeklyUsage(weeklyUsages.size() + 1, stroomVerbruik, gasVerbruik);
+        weeklyUsages.add(weeklyUsage);
+
+        // Toon het totaaloverzicht na het toevoegen van wekelijkse gegevens
+        showOverview();
+    }
+
+    private static void showOverview() {
+        // Tonen van totaal stroom- en gasverbruik
+        System.out.println("Totaal Stroom Verbruik: " + totaalStroomVerbruik);
+        System.out.println("Totaal Gas Verbruik: " + totaalGasVerbruik);
+
+        // Berekenen en tonen van totale kosten
+        double totaleKosten = (totaalStroomVerbruik * stroomTarief) + (totaalGasVerbruik * gasTarief);
+        System.out.println("Totale Kosten: " + totaleKosten);
+    }
+
+    // Innerlijke klasse voor wekelijkse gegevens
+    private static class WeeklyUsage {
+        private final int weekNumber;
+        private final double stroomVerbruik;
+        private final double gasVerbruik;
+
+        public WeeklyUsage(int weekNumber, double stroomVerbruik, double gasVerbruik) {
+            this.weekNumber = weekNumber;
+            this.stroomVerbruik = stroomVerbruik;
+            this.gasVerbruik = gasVerbruik;
+        }
+
+        public int getWeekNumber() {
+            return weekNumber;
+        }
+
+        public double getStroomVerbruik() {
+            return stroomVerbruik;
+        }
+
+        public double getGasVerbruik() {
+            return gasVerbruik;
+        }
+    }
+
+
+
+    private double calculateMonthlyUsage(int monthNumber) {
+        double totalMonthlyUsage = 0;
+
+        for (WeeklyUsage weeklyUsage : weeklyUsages) {
+            if ((weeklyUsage.getWeekNumber() - 1) / 4 + 1 == monthNumber) {
+                totalMonthlyUsage += weeklyUsage.getStroomVerbruik() + weeklyUsage.getGasVerbruik();
+            }
+        }
+
+        return totalMonthlyUsage;
+    }
+
+    private double calculateYearlyUsage() {
+        double totalYearlyUsage = 0;
+
+        for (WeeklyUsage weeklyUsage : weeklyUsages) {
+            totalYearlyUsage += weeklyUsage.getStroomVerbruik() + weeklyUsage.getGasVerbruik();
+        }
+
+        return totalYearlyUsage;
+    }
+
+
+
+
 
     @Override
     public void start(Stage stage) throws IOException {
         //FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
+
+        TextField txtAnnualAdvance = new TextField("Jaarlijks voorschot");
+
+        Button initializeButton = new Button("Initialize");
+        initializeButton.setOnAction(e -> {
+            jaarlijksVoorschot = Double.parseDouble(txtAnnualAdvance.getText());
+
+            // Vraag gebruiker om tarieven in te voeren
+            TextInputDialog gasTariefDialog = new TextInputDialog("0");
+            gasTariefDialog.setHeaderText("Voer het gas tarief in:");
+            gasTariefDialog.setContentText("Gas Tarief:");
+            gasTarief = Double.parseDouble(gasTariefDialog.showAndWait().orElse("0"));
+
+            TextInputDialog stroomTariefDialog = new TextInputDialog("0");
+            stroomTariefDialog.setHeaderText("Voer het stroom tarief in:");
+            stroomTariefDialog.setContentText("Stroom Tarief:");
+            stroomTarief = Double.parseDouble(stroomTariefDialog.showAndWait().orElse("0"));
+
+            System.out.println("Initialisatie voltooid. Voorschot: " + jaarlijksVoorschot +
+                    ", Gas Tarief: " + gasTarief +
+                    ", Stroom Tarief: " + stroomTarief);
+        });
+
+
 
         GridPane root = new GridPane();
         root.setHgap(10);
@@ -75,7 +176,7 @@ public class HelloApplication extends Application {
 
 
         registerButton.setOnAction(e -> {
-            // Gegevens ophalen uit de tekstvelden en datepickers
+
             String electricityRate = txtelectricityRate.getText();
             String electricityFrom = electricityFromDate.getValue().toString();
             String electricityTo = electricityToDate.getValue().toString();
@@ -94,21 +195,36 @@ public class HelloApplication extends Application {
             String consumptionStart = consumptionStartDate.getValue().toString();
             String consumptionEnd = consumptionEndDate.getValue().toString();
 
-            System.out.println("Electricity Rate: " + electricityRate);
-            System.out.println("Electricity From Date: " + electricityFrom);
-            System.out.println("Electricity To Date: " + electricityTo);
-            System.out.println("Customer Number: " + customerNumber);
-            System.out.println("First Name: " + firstName);
-            System.out.println("Last Name: " + lastName);
-            System.out.println("Annual Advance: " + annualAdvance);
-            System.out.println("Gas Rate: " + gasRate);
-            System.out.println("Gas From Date: " + gasFrom);
-            System.out.println("Gas To Date: " + gasTo);
-            System.out.println("Electricity Consumption: " + electricityConsumption);
-            System.out.println("Gas Consumption: " + gasConsumption);
-            System.out.println("Consumption Start Date: " + consumptionStart);
-            System.out.println("Consumption End Date: " + consumptionEnd);
+
+
+            // Bereken wekelijkse consumptie
+
+            // Convert consumptions to doubles
+            double electricityConsumptionValue = Double.parseDouble(electricityConsumption);
+            double gasConsumptionValue = Double.parseDouble(gasConsumption);
+
+            // Calculate weekly, monthly, and yearly consumption
+            double weeklyElectricityConsumption = electricityConsumptionValue / 7;
+            double monthlyElectricityConsumption = electricityConsumptionValue * 4;
+            double yearlyElectricityConsumption = electricityConsumptionValue * 52;
+
+            double weeklyGasConsumption = gasConsumptionValue / 7;
+            double monthlyGasConsumption = gasConsumptionValue * 4;
+            double yearlyGasConsumption = gasConsumptionValue * 52;
+
+            // Add weekly usage to the total
+            addWeeklyUsage(weeklyElectricityConsumption, weeklyGasConsumption);
+
+            // Display the results
+            System.out.println("Weekly Electricity Consumption: " + weeklyElectricityConsumption);
+            System.out.println("Monthly Electricity Consumption: " + calculateMonthlyUsage(1));  // Use month 1 as an example
+            System.out.println("Yearly Electricity Consumption: " + calculateYearlyUsage());
+            System.out.println("Weekly Gas Consumption: " + weeklyGasConsumption);
+            System.out.println("Monthly Gas Consumption: " + calculateMonthlyUsage(1));  // Use month 1 as an example
+            System.out.println("Yearly Gas Consumption: " + calculateYearlyUsage());
+
         });
+
 
 
 
@@ -117,6 +233,7 @@ public class HelloApplication extends Application {
         stage.setScene(scene);
         stage.show();
     }
+
 
     public static void main(String[] args) {
         launch();
