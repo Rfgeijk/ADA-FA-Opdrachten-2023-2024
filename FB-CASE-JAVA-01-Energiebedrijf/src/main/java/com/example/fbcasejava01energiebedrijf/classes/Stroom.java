@@ -1,40 +1,37 @@
 package com.example.fbcasejava01energiebedrijf.classes;
 
 public class Stroom {
+    private double tariefKwh;
+    private String datumVanaf;
+    private String datumTot;
 
-    private String electricityRate;
-
-    private String electricityFromDate;
-
-    private String electricityToDate;
-
-    public Stroom(String electricityRate, String electricityFromDate, String electricityToDate) {
-        this.electricityRate = electricityRate;
-        this.electricityFromDate = electricityFromDate;
-        this.electricityToDate = electricityToDate;
+    public Stroom(double tariefKwh, String datumVanaf, String datumTot) {
+        this.tariefKwh = tariefKwh;
+        this.datumVanaf = datumVanaf;
+        this.datumTot = datumTot;
     }
 
-    public String getElectricityRate() {
-        return electricityRate;
+    public double getTariefKwh() {
+        return tariefKwh;
     }
 
-    public void setElectricityRate(String electricityRate) {
-        this.electricityRate = electricityRate;
+    public void setTariefKwh(double tariefKwh) {
+        this.tariefKwh = tariefKwh;
     }
 
-    public String getElectricityFromDate() {
-        return electricityFromDate;
+    public String getDatumVanaf() {
+        return datumVanaf;
     }
 
-    public void setElectricityFromDate(String electricityFromDate) {
-        this.electricityFromDate = electricityFromDate;
+    public void setDatumVanaf(String datumVanaf) {
+        this.datumVanaf = datumVanaf;
     }
 
-    public String getElectricityToDate() {
-        return electricityToDate;
+    public String getDatumTot() {
+        return datumTot;
     }
 
-    public void setElectricityToDate(String electricityToDate) {
-        this.electricityToDate = electricityToDate;
+    public void setDatumTot(String datumTot) {
+        this.datumTot = datumTot;
     }
 }
