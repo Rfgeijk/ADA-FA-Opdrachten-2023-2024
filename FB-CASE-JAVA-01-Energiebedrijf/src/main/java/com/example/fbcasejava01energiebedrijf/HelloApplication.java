@@ -123,24 +123,32 @@ public class HelloApplication extends Application {
         root.setVgap(10);
 
         Label klant = new Label("Vul uw hier Klantgegevens in:");
-        TextField txtcustomerNumber= new TextField("Klantnr");
-        TextField txtfirstName = new TextField("Voornaam");
-        TextField txtlastName = new TextField("Achternaam");
-        TextField txtannualAdvance = new TextField("Jaarlijks voorschot");
+        TextField txtcustomerNumber= new TextField();
+        txtcustomerNumber.setPromptText("Klantnummer");
+        TextField txtfirstName = new TextField();
+        txtfirstName.setPromptText("Voornaam");
+        TextField txtlastName = new TextField();
+        txtlastName.setPromptText("Achternaam");
+        TextField txtannualAdvance = new TextField();
+        txtannualAdvance.setPromptText("Jaarlijks voorschot");
 
         Label elektriciteit = new Label("Vul hier uw elektriciteitsgegevens met start en eind datum van de week:");
-        TextField txtelectricityRate = new TextField("Tarief kWh");
+        TextField txtelectricityRate = new TextField();
+        txtelectricityRate.setPromptText("Tarief kWh");
         DatePicker electricityFromDate = new DatePicker();
         DatePicker electricityToDate = new DatePicker();
 
         Label gas = new Label("Vul hier uw gas gegevens met start en eind datum van de week:");
-        TextField txtgasRate = new TextField("Tarief gas");
+        TextField txtgasRate = new TextField();
+        txtgasRate.setPromptText("Tarief Gas");
         DatePicker gasFromDate = new DatePicker();
         DatePicker gasToDate = new DatePicker();
 
         Label verbruik = new Label("Vul hier uw totale verbruik in met start en eind datum van de week:");
-        TextField txtelectricityConsumption = new TextField("elektriciteit consumptie");
-        TextField txtgasConsumption = new TextField("gas consumptie");
+        TextField txtelectricityConsumption = new TextField();
+        txtelectricityConsumption.setPromptText("elektriciteit consumptie");
+        TextField txtgasConsumption = new TextField();
+        txtgasConsumption.setPromptText("gas consumptie");
         DatePicker consumptionStartDate = new DatePicker();
         DatePicker consumptionEndDate = new DatePicker();
 
