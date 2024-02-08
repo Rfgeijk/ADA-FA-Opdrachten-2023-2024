@@ -196,7 +196,7 @@ public class HelloApplication extends Application {
                     txtelectricityRate.getText().isEmpty() || gasRate.repeat(1).isEmpty() ||
                     txtelectricityConsumption.getText().isEmpty() || txtgasConsumption.getText().isEmpty() ||
                     consumptionStartDate.getValue() == null || consumptionEndDate.getValue() == null) {
-                
+
                 System.out.println("Error: Please fill in all required fields.");
                 return;
             }
