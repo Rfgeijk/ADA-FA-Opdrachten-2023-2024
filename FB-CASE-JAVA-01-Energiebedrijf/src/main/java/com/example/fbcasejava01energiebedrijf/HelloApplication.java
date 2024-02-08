@@ -23,25 +23,21 @@ public class HelloApplication extends Application {
         totaalStroomVerbruik += stroomVerbruik;
         totaalGasVerbruik += gasVerbruik;
 
-        // Voeg wekelijkse gegevens toe aan de lijst
         WeeklyUsage weeklyUsage = new WeeklyUsage(weeklyUsages.size() + 1, stroomVerbruik, gasVerbruik);
         weeklyUsages.add(weeklyUsage);
-
-        // Toon het totaaloverzicht na het toevoegen van wekelijkse gegevens
         showOverview();
     }
 
     private static void showOverview() {
-        // Tonen van totaal stroom- en gasverbruik
         System.out.println("Totaal Stroom Verbruik: " + totaalStroomVerbruik);
         System.out.println("Totaal Gas Verbruik: " + totaalGasVerbruik);
 
-        // Berekenen en tonen van totale kosten
+
         double totaleKosten = (totaalStroomVerbruik * stroomTarief) + (totaalGasVerbruik * gasTarief);
         System.out.println("Totale Kosten: " + totaleKosten);
     }
 
-    // Innerlijke klasse voor wekelijkse gegevens
+
     private static class WeeklyUsage {
         private final int weekNumber;
         private final double stroomVerbruik;
@@ -104,7 +100,7 @@ public class HelloApplication extends Application {
         initializeButton.setOnAction(e -> {
             jaarlijksVoorschot = Double.parseDouble(txtAnnualAdvance.getText());
 
-            // Vraag gebruiker om tarieven in te voeren
+
             TextInputDialog gasTariefDialog = new TextInputDialog("0");
             gasTariefDialog.setHeaderText("Voer het gas tarief in:");
             gasTariefDialog.setContentText("Gas Tarief:");
@@ -195,15 +191,24 @@ public class HelloApplication extends Application {
             String consumptionStart = consumptionStartDate.getValue().toString();
             String consumptionEnd = consumptionEndDate.getValue().toString();
 
+            if (txtcustomerNumber.getText().isEmpty() || txtfirstName.getText().isEmpty() ||
+                    txtlastName.getText().isEmpty() || txtannualAdvance.getText().isEmpty() ||
+                    txtelectricityRate.getText().isEmpty() || gasRate.repeat(1).isEmpty() ||
+                    txtelectricityConsumption.getText().isEmpty() || txtgasConsumption.getText().isEmpty() ||
+                    consumptionStartDate.getValue() == null || consumptionEndDate.getValue() == null) {
+                
+                System.out.println("Error: Please fill in all required fields.");
+                return;
+            }
 
 
-            // Bereken wekelijkse consumptie
 
-            // Convert consumptions to doubles
+
+
             double electricityConsumptionValue = Double.parseDouble(electricityConsumption);
             double gasConsumptionValue = Double.parseDouble(gasConsumption);
 
-            // Calculate weekly, monthly, and yearly consumption
+
             double weeklyElectricityConsumption = electricityConsumptionValue / 7;
             double monthlyElectricityConsumption = electricityConsumptionValue * 4;
             double yearlyElectricityConsumption = electricityConsumptionValue * 52;
@@ -212,10 +217,24 @@ public class HelloApplication extends Application {
             double monthlyGasConsumption = gasConsumptionValue * 4;
             double yearlyGasConsumption = gasConsumptionValue * 52;
 
-            // Add weekly usage to the total
             addWeeklyUsage(weeklyElectricityConsumption, weeklyGasConsumption);
 
-            // Display the results
+
+            try {
+
+
+                System.out.println("Weekly Electricity Consumption: " + weeklyElectricityConsumption);
+                System.out.println("Monthly Electricity Consumption: " + calculateMonthlyUsage(1));
+                System.out.println("Yearly Electricity Consumption: " + calculateYearlyUsage());
+                System.out.println("Weekly Gas Consumption: " + weeklyGasConsumption);
+                System.out.println("Monthly Gas Consumption: " + calculateMonthlyUsage(1));
+                System.out.println("Yearly Gas Consumption: " + calculateYearlyUsage());
+            } catch (NumberFormatException ex) {
+                System.out.println("Error: Invalid numeric input. Please enter valid numbers.");
+            }
+
+
+
             System.out.println("Weekly Electricity Consumption: " + weeklyElectricityConsumption);
             System.out.println("Monthly Electricity Consumption: " + calculateMonthlyUsage(1));  // Use month 1 as an example
             System.out.println("Yearly Electricity Consumption: " + calculateYearlyUsage());
