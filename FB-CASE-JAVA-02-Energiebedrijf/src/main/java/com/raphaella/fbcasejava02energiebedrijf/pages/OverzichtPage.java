@@ -20,6 +20,12 @@ public class OverzichtPage {
 
     private Scene deScene = new Scene(root, 800, 600);
 
+    private double totalMonthlyGasConsumption = 0.0;
+    private double totalYearlyGasConsumption = 0.0;
+    private double totalMonthlyElectricityConsumption = 0.0;
+    private double totalYearlyElectricityConsumption = 0.0;
+
+
     public OverzichtPage() {
         loadConsumption();
     }
@@ -27,20 +33,25 @@ public class OverzichtPage {
     private void loadConsumption() {
         List<Verbruik> consumption = db.getAllConsumption();
 
-        for (Verbruik verbruik : consumption) {
-            VBox consumptionBox = verbruik.show();
 
-            Button updateButton = new Button("Update");
+        VBox consumptionBox = null;
+        Button updateButton = null;
+        Button deleteButton = null;
+        VBox consumptionContainer = null;
+        for (Verbruik verbruik : consumption) {
+            consumptionContainer = new VBox();
+            consumptionBox = verbruik.show();
+
+            updateButton = new Button("Update");
             updateButton.setOnAction(event -> {
                 UpdatePage updatePage = new UpdatePage();
                 updatePage.show();
             });
 
-            Button deleteButton = new Button("Delete");
+            deleteButton = new Button("Delete");
             deleteButton.setOnAction(event -> {
-                db.deleteConsumption(verbruik); // Pass the specific Verbruik object to delete
+                db.deleteConsumption(verbruik);
             });
-
 
             // Calculations for monthly and yearly gas consumption
             double weeklyGasConsumption = Double.parseDouble(verbruik.getGasConsumption()) / 7;
@@ -52,22 +63,30 @@ public class OverzichtPage {
             double monthlyElectricityConsumption = weeklyElectricityConsumption * 4;
             double yearlyElectricityConsumption = weeklyElectricityConsumption * 52;
 
-            // Displaying calculated values in labels
-            Label monthlyGasLabel = new Label("Monthly Gas Consumption: " + monthlyGasConsumption);
-            Label yearlyGasLabel = new Label("Yearly Gas Consumption: " + yearlyGasConsumption);
-
-            Label monthlyElectricityLabel = new Label("Monthly Electricity Consumption: " + monthlyElectricityConsumption);
-            Label yearlyElectricityLabel = new Label("Yearly Electricity Consumption: " + yearlyElectricityConsumption);
-
-            root.getChildren().addAll(
-                    consumptionBox, updateButton, deleteButton,
-                    monthlyGasLabel, yearlyGasLabel,
-                    monthlyElectricityLabel, yearlyElectricityLabel
-            );
-
+            // Add to the total consumption
+            totalMonthlyGasConsumption += monthlyGasConsumption;
+            totalYearlyGasConsumption += yearlyGasConsumption;
+            totalMonthlyElectricityConsumption += monthlyElectricityConsumption;
+            totalYearlyElectricityConsumption += yearlyElectricityConsumption;
         }
-    }
 
+        // Display total consumption in labels
+        Label totalMonthlyGasLabel = new Label("Total Monthly Gas Consumption: " + totalMonthlyGasConsumption);
+        Label totalYearlyGasLabel = new Label("Total Yearly Gas Consumption: " + totalYearlyGasConsumption);
+        Label totalMonthlyElectricityLabel = new Label("Total Monthly Electricity Consumption: " + totalMonthlyElectricityConsumption);
+        Label totalYearlyElectricityLabel = new Label("Total Yearly Electricity Consumption: " + totalYearlyElectricityConsumption);
+
+        consumptionContainer.getChildren().addAll(
+                consumptionBox, updateButton, deleteButton,
+                totalMonthlyGasLabel, totalYearlyGasLabel,
+                totalMonthlyElectricityLabel, totalYearlyElectricityLabel
+        );
+
+        root.getChildren().add(
+                consumptionContainer
+        );
+
+    }
 
     public void show() {
         deStage.setScene(deScene);

@@ -39,7 +39,7 @@ public class InputPage {
         DatePicker consumptionEndDate = new DatePicker();
 
         Button registerButton = new Button("Register");
-        Button overzichtbutton = new Button("Hier kunt de records van de vorige weken vinden");
+        Button overzichtbutton = new Button("Hier kunt u de records van vorige week vinden en het totaal");
 
         root.add(klant, 0, 0);
         root.add(txtcustomerNumber, 0, 1);
